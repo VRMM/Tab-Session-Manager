@@ -1,6 +1,7 @@
 import browser from "webextension-polyfill";
 import uuidv4 from "uuid/v4";
 import log from "loglevel";
+import { backupIndividualSessions } from "./backup.js";
 import { openSession } from "./open.js";
 import { getSessionsByTag } from "./tag.js";
 import { loadCurrentSession, saveSession, removeSession } from "./save.js";
@@ -24,6 +25,7 @@ export const autoSaveRegular = async () => {
     if (!isChanged) return;
 
     await saveSession(session);
+    await backupIndividualSessions();
     const limit = getSettings("autoSaveLimit");
     removeOverLimit("regular", limit);
   } catch (e) {
